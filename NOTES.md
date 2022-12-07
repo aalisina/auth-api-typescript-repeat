@@ -1,5 +1,5 @@
 Init TS
-npx typescript --init
+npx typescript --init | tsc --init
 
 Dev dependencies
 npm i typescript ts-node-dev @types/express @types/config pino-pretty @types/nodemailer @types/lodash @types/jsonwebtoken -D
