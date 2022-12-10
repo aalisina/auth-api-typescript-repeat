@@ -1,6 +1,19 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
+import {
+  getModelForClass,
+  modelOptions,
+  prop,
+  Severity,
+} from "@typegoose/typegoose";
 import { v4 as uuidv4 } from "uuid";
 
+@modelOptions({
+  schemaOptions: {
+    timestamps: true,
+  },
+  options: {
+    allowMixed: Severity.ALLOW,
+  },
+})
 export class User {
   @prop({ lowercase: true, required: true, unique: true })
   email: string;
@@ -18,7 +31,7 @@ export class User {
   verificationCode: string;
 
   @prop()
-  passwordResetCode: string;
+  passwordResetCode: string | null;
 
   @prop({ default: false })
   verified: boolean;
