@@ -1,4 +1,4 @@
-import { prop } from "@typegoose/typegoose";
+import { getModelForClass, prop } from "@typegoose/typegoose";
 import { v4 as uuidv4 } from "uuid";
 
 export class User {
@@ -23,3 +23,7 @@ export class User {
   @prop({ default: false })
   verified: boolean;
 }
+
+const UserModel = getModelForClass(User);
+
+export default UserModel;
