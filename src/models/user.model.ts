@@ -3,9 +3,21 @@ import {
   modelOptions,
   prop,
   Severity,
+  pre,
 } from "@typegoose/typegoose";
+import argon2 from "argon2";
 import { v4 as uuidv4 } from "uuid";
 
+@pre<User>("save", async function () {
+  if (!this.isModified("password")) {
+    return;
+  }
+
+  const hash = await argon2.hash(this.password);
+
+  this.password = hash;
+  return;
+})
 @modelOptions({
   schemaOptions: {
     timestamps: true,
