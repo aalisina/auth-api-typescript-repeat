@@ -12,8 +12,13 @@ export async function createUserHandler(
   try {
     const user = await createUserService(body);
 
+    await sendEmail({
+      from: "test@test.test",
+      to: user.email,
+      subject: "Please verify your account",
+      text: `Verification code: ${user.verificationCode}  Id: ${user._id}`,
+    });
     return res.send("User successfully created.");
-    await sendEmail();
   } catch (err: any) {
     if (err.code === 11000) {
       return res.status(409).send("Account already exists.");
