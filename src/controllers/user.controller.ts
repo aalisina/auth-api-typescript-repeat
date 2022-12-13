@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { CreateUserInput } from "../schemas/user.schema";
+import { CreateUserInput, VerifyUserInput } from "../schemas/user.schema";
 import { createUserService } from "../services/user.service";
 import sendEmail from "../utils/mailer";
 
@@ -25,4 +25,17 @@ export async function createUserHandler(
     }
     return res.status(500).send(err);
   }
+}
+
+export async function verifyUserHandler(
+  req: Request<VerifyUserInput>,
+  res: Response
+) {
+  const { id, verificationCode } = req.params;
+
+  // find user by id
+
+  // check if user is already verified
+
+  // check if verification code is correct
 }
