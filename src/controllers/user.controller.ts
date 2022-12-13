@@ -1,6 +1,9 @@
 import { Response, Request } from "express";
 import { CreateUserInput, VerifyUserInput } from "../schemas/user.schema";
-import { createUserService } from "../services/user.service";
+import {
+  createUserService,
+  findUserByIdService,
+} from "../services/user.service";
 import sendEmail from "../utils/mailer";
 
 export async function createUserHandler(
@@ -34,8 +37,21 @@ export async function verifyUserHandler(
   const { id, verificationCode } = req.params;
 
   // find user by id
-
+  const user = await findUserByIdService(id);
+  if (!user) {
+    return res.send("Could not verify user.");
+  }
   // check if user is already verified
+  if (user.verified) {
+    return res.send("User is already verified.");
+  }
 
   // check if verification code is correct
+  if (user.verificationCode === verificationCode) {
+    user.verified = true;
+    await user.save();
+    return res.send("User successfully verified.");
+  }
+  // if verification code is wrong
+  return res.send("Could not verify user.");
 }
