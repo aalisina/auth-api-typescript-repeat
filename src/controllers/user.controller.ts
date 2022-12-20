@@ -6,9 +6,12 @@ import {
 } from "../schemas/user.schema";
 import {
   createUserService,
+  findUserByEmail,
   findUserByIdService,
 } from "../services/user.service";
+import log from "../utils/logger";
 import sendEmail from "../utils/mailer";
+import { v4 as uuidv4 } from "uuid";
 
 export async function createUserHandler(
   req: Request<{}, {}, CreateUserInput>,
@@ -65,6 +68,29 @@ export async function forgotPasswordHandler(
   res: Response
 ) {
   const { email } = req.body;
+  const msg =
+    "If a user with the email exists, a password reset link will be emailed";
 
-  // const user = await findUserByEmail(email); 
+  const user = await findUserByEmail(email);
+  if (!user) {
+    log.debug(`User with email ${email} does not exist.`);
+    return res.send(msg);
+  }
+  if (!user.verified) {
+    return res.send("User is not verified.");
+  }
+
+  const passwordResetCode = uuidv4();
+
+  user.passwordResetCode = passwordResetCode;
+  await user.save();
+
+  await sendEmail({
+    to: user.email,
+    from: "test@test.test",
+    subject: "Reset your password.",
+    text: `User id: ${user._id} . Password reset code: ${passwordResetCode}`,
+  });
+  log.debug(`Password reset email sent to ${email}`);
+  return res.send(msg);
 }
