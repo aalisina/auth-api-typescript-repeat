@@ -86,11 +86,11 @@ export async function forgotPasswordHandler(
   await user.save();
 
   await sendEmail({
-    to: user.email,
     from: "test@test.test",
-    subject: "Reset your password.",
-    text: `User id: ${user._id} . Password reset code: ${passwordResetCode}`,
+    to: user.email,
+    subject: "Password reset code",
+    text: `Password reset code: ${user.passwordResetCode}  Id: ${user._id}`,
   });
-  log.debug(`Password reset email sent to ${email}`);
+  log.debug(`Password reset code sent to ${email}`);
   return res.send(msg);
 }
