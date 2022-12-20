@@ -1,5 +1,9 @@
 import { Response, Request } from "express";
-import { CreateUserInput, VerifyUserInput } from "../schemas/user.schema";
+import {
+  CreateUserInput,
+  ForgotPasswordInput,
+  VerifyUserInput,
+} from "../schemas/user.schema";
 import {
   createUserService,
   findUserByIdService,
@@ -54,4 +58,13 @@ export async function verifyUserHandler(
   }
   // if verification code is wrong
   return res.send("Could not verify user.");
+}
+
+export async function forgotPasswordHandler(
+  req: Request<{}, {}, ForgotPasswordInput>,
+  res: Response
+) {
+  const { email } = req.body;
+
+  // const user = await findUserByEmail(email); 
 }
