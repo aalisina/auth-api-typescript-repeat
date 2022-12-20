@@ -14,4 +14,4 @@ Git
 Git init
 
 https://www.youtube.com/watch?v=qylGaki0JhY&t=1118s
-Left off 1:02:00
+Left off 1:20
